@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="smspf"
+  id="myeclipse.1422320347685"
+  context-root="/smspf"
+  j2ee-spec="5.0"
+  archive="smspf.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

@@ -1,0 +1,80 @@
+package com.sms.send.impl;
+
+import java.sql.Timestamp;
+
+import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
+import javax.jws.soap.SOAPBinding.Style;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.cxf.message.Message;
+import org.apache.cxf.phase.PhaseInterceptorChain;
+import org.apache.cxf.transport.http.AbstractHTTPDestination;
+import org.apache.log4j.Logger;
+
+import com.sms.core.HttpBean;
+import com.sms.core.ParentBean;
+import com.sms.dao.SmsDao;
+import com.sms.pojo.Execution;
+import com.sms.pojo.SmsCallHistory;
+import com.sms.reply.ReplyJob;
+import com.sms.send.SendMessage;
+/**
+ * WebService 短信发送接口实现.
+ * @author zhuwh
+ */
+@WebService
+@SOAPBinding(style = Style.RPC)
+@SuppressWarnings("unchecked")
+public class SendMessageImpl extends ParentBean implements SendMessage {
+	private static Logger logger = Logger.getLogger(SendMessageImpl.class);
+	public SmsDao smsDao;
+
+	public int sendSms(String key, String mobile, String message) {
+		try {
+			if (null != key && !key.trim().equals("") && smsDao.checkKeyCode(key)) {
+				int result = 0;
+				String url = smsDao.getSendUrl(); // 发送短信接口
+				String charset = smsDao.getCharset(); // 字符编码
+				String successFlag = smsDao.getSuccessFlag(); // 成功标示符
+				NameValuePair[] nvp = smsDao.getSendParam(mobile, message); // 接口必要参数
+				SmsCallHistory sch = new SmsCallHistory(); // 记录日志 
+				sch.setReqIpAddr("");
+				sch.setSendMsg(message);
+				sch.setMobile(mobile);
+				sch.setCallTime(new Timestamp(System.currentTimeMillis()));
+				sch.setInfDesc("短信发送");
+				sch.setReqIpAddr(getClientIp());
+				sch.setInfUrl(url);
+				sch.setLocalParam(getParamStr(nvp));
+				Execution exec = HttpBean.doPost(url, charset, nvp); // HTTP请求调用目标
+				sch.setResultMsg(exec.result == null ? "" : exec.result);
+				if (exec.getStatus() == 1 && exec.getResult().startsWith(successFlag)) { // 发送短信成功
+					result = 1;
+				} else if (exec.getStatus() == 500) {
+					result = 500;
+				}
+				sch.setStatus(String.valueOf(result));
+				smsDao.saveLog(sch);
+				logger.info("调用短信发送接口[result="+result+",mobile="+mobile+",message="+message+"]");
+				return result;
+			} else {
+				return 2;
+			}
+		} catch (Exception e) {
+			logger.info("短信发送接口调用异常(500):"+e.getMessage());
+			return 500;
+		}
+		// 成功提示result=0&description=发送短信成功&taskid=21084957330&faillist=&task_id=21084957330
+	}
+
+	public SmsDao getSmsDao() {
+		return smsDao;
+	}
+
+	public void setSmsDao(SmsDao smsDao) {
+		this.smsDao = smsDao;
+	}
+
+}

@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/project_tangshan/!svn/ver/4410/smspf/smspf/src
+END
+databases.properties
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/project_tangshan/!svn/ver/4410/smspf/smspf/src/databases.properties
+END
+applicationContext-cxf.xml
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/project_tangshan/!svn/ver/4410/smspf/smspf/src/applicationContext-cxf.xml
+END
+applicationContext-bean.xml
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/project_tangshan/!svn/ver/4410/smspf/smspf/src/applicationContext-bean.xml
+END
+log4j.properties
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/project_tangshan/!svn/ver/4410/smspf/smspf/src/log4j.properties
+END
+applicationContext-quarzt.xml
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/project_tangshan/!svn/ver/4410/smspf/smspf/src/applicationContext-quarzt.xml
+END

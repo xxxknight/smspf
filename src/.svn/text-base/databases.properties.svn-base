@@ -1,0 +1,4 @@
+driver=com.microsoft.sqlserver.jdbc.SQLServerDriver
+url=jdbc:sqlserver://60.2.8.118;databaseName=hframe
+user=sa
+password=root.1234
